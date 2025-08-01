@@ -1,11 +1,10 @@
 'use client'
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Stars, Sparkles } from "@react-three/drei";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import dynamic from 'next/dynamic'
-import { Stars } from '@react-three/drei'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { EffectComposer, Bloom, ChromaticAberration, Vignette } from '@react-three/postprocessing'
 
 const SolarSystem = dynamic(() => import("./SolarSystem"), {
   ssr: false,
@@ -24,25 +23,51 @@ export default function RenderSolarSystem() {
 
     return (
         <Canvas
-            style={{ background: 'black' }}
-            gl={{ antialias: true }}
+            style={{ background: 'radial-gradient(ellipse at center, #0a0a2a 0%, #000000 100%)' }}
+            gl={{ 
+                antialias: true,
+                alpha: true,
+                powerPreference: "high-performance"
+            }}
         >
+            {/* Enhanced star field */}
             <Stars
-                radius={100}        // How far the stars are
-                depth={50}          // How many layers of stars
-                count={1000}        // Number of stars
-                factor={5}          // Size factor
-                saturation={0}      // 0 for white stars
-                fade                // Enables fading for depth
+                radius={200}
+                depth={100}
+                count={2000}
+                factor={4}
+                saturation={0}
+                fade
+                speed={0.5}
+            />
+            
+            {/* Additional sparkles for cosmic effect */}
+            <Sparkles 
+                count={100}
+                scale={200}
+                size={2}
+                speed={0.3}
+                opacity={0.3}
+                color="#ffffff"
             />
 
             <SolarSystem />
+            
             <OrbitControls />
+            
             <EffectComposer>
                 <Bloom
-                intensity={2}             // Strength of the bloom
-                luminanceThreshold={0.2}    // Brightness threshold
-                luminanceSmoothing={0.9}    // How softly it transitions
+                    intensity={1.5}
+                    luminanceThreshold={0.3}
+                    luminanceSmoothing={0.9}
+                    mipmapBlur
+                />
+                <ChromaticAberration 
+                    offset={[0.0005, 0.0005]} 
+                />
+                <Vignette 
+                    darkness={0.3}
+                    offset={0.5}
                 />
             </EffectComposer>
         </Canvas>

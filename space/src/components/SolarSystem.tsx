@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react'
-import { useGLTF, useHelper, useTexture } from '@react-three/drei'
+import React, { useRef } from 'react'
+import { useHelper } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import Sun from './CelestialBodies/Sun'
 import Planet from './CelestialBodies/Planet'
 import SaturnRing from './CelestialBodies/SaturnRing'
+import Orbit from './CelestialBodies/Orbit'
 import * as THREE from 'three';
 
 type Props = {
@@ -15,24 +16,131 @@ type Props = {
 const SolarSystem = (props: Props) => {
   const group = useRef<THREE.Group>(null)
   const lightRef = useRef<THREE.PointLight>(null!)
-  const { nodes, materials } = useGLTF('/scene.gltf')
+  
+  // Add refs for each planet
+  const mercuryRef = useRef<THREE.Group>(null!)
+  const venusRef = useRef<THREE.Group>(null!)
+  const earthRef = useRef<THREE.Group>(null!)
+  const marsRef = useRef<THREE.Group>(null!)
+  const jupiterRef = useRef<THREE.Group>(null!)
+  const saturnRef = useRef<THREE.Group>(null!)
+  const uranusRef = useRef<THREE.Group>(null!)
+  const neptuneRef = useRef<THREE.Group>(null!)
+  const plutoRef = useRef<THREE.Group>(null!)
 
-  const Neptune = <Planet texturePath='textures/2k_neptune.jpg' position={[-0.001, -0.001, 0.203]} rotation={[1.42, 0.639, 0.09]} scale={8.5} />
-  const Saturn = <Planet texturePath='textures/2k_saturn.jpg' position={[-0.107, -0.024, -0.002]} rotation={[0.151, -0.098, 0.015]} scale={8.5} />
-  const Mecury = <Planet texturePath='textures/2k_mercury.jpg' position={[0, 0, -0.001]} rotation={[-0.07, 0, 0]} scale={0.9}/>
-  const Venus = <Planet texturePath='textures/2k_venus_surface.jpg' position={[0, 0, 0]} rotation={[0.036, 0, 0]} scale={1.14} />
-  const Earth = <Planet texturePath='textures/2k_earth_daymap.jpg' position={[2.253, -0.127, 15.477]} rotation={[-1.279, 0.235, -1.326]} scale={1.27} />
-  const Moon = <Planet texturePath='textures/2k_moon.jpg' position={[0.651, 1.221, 15.774]} rotation={[-Math.PI / 2, 0, 0]} scale={0.35} />
-  const Mars = <Planet texturePath='textures/2k_mars.jpg' position={[1.219, 0.791, 20.413]} rotation={[-1.648, 0, 0]} scale={1.14} />
-  const Uranus = <Planet texturePath='textures/2k_uranus.jpg' position={[5.814, 1.954, 36.949]} rotation={[-1.643, -0.08, -0.006]} scale={1.27} />
-  const Pluto = <Planet texturePath='textures/PlutoColour.webp' position={[7.508, 3.243, 46.042]} rotation={[-1.702, -0.096, -0.013]} scale={0.65} />
-  const Jupiter = <Planet texturePath='textures/2k_jupiter.jpg' position={[5.110, 1.122, 25.291]} rotation={[-1.733, 0.078, 0.387]} scale={1.69} />
+  // Random starting angles for each planet
+  const [planetAngles] = React.useState(() => ({
+    mercury: Math.random() * Math.PI * 2,
+    venus: Math.random() * Math.PI * 2,
+    earth: Math.random() * Math.PI * 2,
+    mars: Math.random() * Math.PI * 2,
+    jupiter: Math.random() * Math.PI * 2,
+    saturn: Math.random() * Math.PI * 2,
+    uranus: Math.random() * Math.PI * 2,
+    neptune: Math.random() * Math.PI * 2,
+    pluto: Math.random() * Math.PI * 2,
+  }))
+
+  // Axial tilts for each planet (in radians)
+  const axialTilts = {
+    mercury: 0.034, // ~2°
+    venus: 3.096,   // ~177° (retrograde)
+    earth: 0.409,   // ~23.5°
+    mars: 0.439,    // ~25.2°
+    jupiter: 0.055, // ~3.1°
+    saturn: 0.466,  // ~26.7°
+    uranus: 1.706,  // ~97.8°
+    neptune: 0.494, // ~28.3°
+    pluto: 0.299,   // ~17.1°
+  }
+
+  const Neptune = <Planet texturePath='textures/2k_neptune.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.35} />
+  const Saturn = <Planet texturePath='textures/2k_saturn.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.6} />
+  const Mecury = <Planet texturePath='textures/2k_mercury.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={0.9}/>
+  const Venus = <Planet texturePath='textures/2k_venus_surface.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.14} />
+  const Earth = <Planet texturePath='textures/2k_earth_daymap.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.27} />
+  const Moon = <Planet texturePath='textures/2k_moon.jpg' position={[-1, 1.221, 1]} rotation={[0, 0, 0]} scale={0.35} />
+  const Mars = <Planet texturePath='textures/2k_mars.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.14} />
+  const Uranus = <Planet texturePath='textures/2k_uranus.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.4} />
+  const Pluto = <Planet texturePath='textures/PlutoColour.webp' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={0.65} />
+  const Jupiter = <Planet texturePath='textures/2k_jupiter.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.69} />
   // Add a helper to visualize the directional light
   useHelper(lightRef, THREE.PointLightHelper, 10, 'red')
 
   useFrame((state, delta) => {
-    if (group.current) {
-      // group.current.rotation.y += 0.1 * delta
+    
+    // Animate planet positions along their orbits
+    if (mercuryRef.current) {
+      const angle = planetAngles.mercury + state.clock.elapsedTime * 0.5
+      mercuryRef.current.position.x = 9.5 * Math.cos(angle)
+      mercuryRef.current.position.z = 12 * Math.sin(angle)
+      // Add axial rotation
+      mercuryRef.current.rotation.y = state.clock.elapsedTime * 0.5
+      mercuryRef.current.rotation.x = axialTilts.mercury
+    }
+    if (venusRef.current) {
+      const angle = planetAngles.venus + state.clock.elapsedTime * 0.4
+      venusRef.current.position.x = 12 * Math.cos(angle)
+      venusRef.current.position.z = 15 * Math.sin(angle)
+      // Venus rotates very slowly (retrograde)
+      venusRef.current.rotation.y = -state.clock.elapsedTime * 0.02
+      venusRef.current.rotation.x = axialTilts.venus
+    }
+    if (earthRef.current) {
+      const angle = planetAngles.earth + state.clock.elapsedTime * 0.3
+      earthRef.current.position.x = 15.5 * Math.cos(angle)
+      earthRef.current.position.z = 19 * Math.sin(angle)
+      // Earth's rotation
+      earthRef.current.rotation.y = state.clock.elapsedTime * 1.0
+      earthRef.current.rotation.x = axialTilts.earth
+    }
+    if (marsRef.current) {
+      const angle = planetAngles.mars + state.clock.elapsedTime * 0.25
+      marsRef.current.position.x = 19.5 * Math.cos(angle)
+      marsRef.current.position.z = 24 * Math.sin(angle)
+      // Mars rotation
+      marsRef.current.rotation.y = state.clock.elapsedTime * 0.97
+      marsRef.current.rotation.x = axialTilts.mars
+    }
+    if (jupiterRef.current) {
+      const angle = planetAngles.jupiter + state.clock.elapsedTime * 0.15
+      jupiterRef.current.position.x = 25 * Math.cos(angle)
+      jupiterRef.current.position.z = 31 * Math.sin(angle)
+      // Jupiter's fast rotation
+      jupiterRef.current.rotation.y = state.clock.elapsedTime * 2.4
+      jupiterRef.current.rotation.x = axialTilts.jupiter
+    }
+    if (saturnRef.current) {
+      const angle = planetAngles.saturn + state.clock.elapsedTime * 0.12
+      saturnRef.current.position.x = 30 * Math.cos(angle)
+      saturnRef.current.position.z = 38 * Math.sin(angle)
+      // Saturn's rotation
+      saturnRef.current.rotation.y = state.clock.elapsedTime * 2.1
+      saturnRef.current.rotation.x = axialTilts.saturn
+    }
+    if (uranusRef.current) {
+      const angle = planetAngles.uranus + state.clock.elapsedTime * 0.08
+      uranusRef.current.position.x = 36 * Math.cos(angle)
+      uranusRef.current.position.z = 44 * Math.sin(angle)
+      // Uranus rotates on its side
+      uranusRef.current.rotation.y = state.clock.elapsedTime * 1.4
+      uranusRef.current.rotation.x = axialTilts.uranus
+    }
+    if (neptuneRef.current) {
+      const angle = planetAngles.neptune + state.clock.elapsedTime * 0.06
+      neptuneRef.current.position.x = 42 * Math.cos(angle)
+      neptuneRef.current.position.z = 52 * Math.sin(angle)
+      // Neptune's rotation
+      neptuneRef.current.rotation.y = state.clock.elapsedTime * 1.6
+      neptuneRef.current.rotation.x = axialTilts.neptune
+    }
+    if (plutoRef.current) {
+      const angle = planetAngles.pluto + state.clock.elapsedTime * 0.04
+      plutoRef.current.position.x = 48 * Math.cos(angle)
+      plutoRef.current.position.z = 58 * Math.sin(angle)
+      // Pluto's slow rotation
+      plutoRef.current.rotation.y = state.clock.elapsedTime * 0.15
+      plutoRef.current.rotation.x = axialTilts.pluto
     }
   })
 
@@ -42,154 +150,142 @@ const SolarSystem = (props: Props) => {
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.05}>
         <group rotation={[Math.PI / 2, 0, 0]}>
 
-          {/* This is Neptune */}
-          <group position={[3.135, 0.869, 43.78]} rotation={[-1.674, 0.096, 0]} scale={0.148}>
-            {Neptune}
-          </group>
-
-          {/* This is Saturn and its Ring */}
-          <group position={[-5.187, 0.512, 31.487]} rotation={[-Math.PI / 2, 0, 0]}>
-            <group
-              position={[0.106, 0.075, 0.003]}
-              rotation={[-0.24, -0.235, -0.019]}
-              scale={0.148}>
-
-                {Saturn}
-            </group>
-
-            <SaturnRing position={[-0.008, -0.008, -0.061]} rotation={[-0.175, 0.175, 0]} scale={2} />
-          </group>
-
           {/* This is Mecury */}
-          <group position={[0.058, 0.062, 11.272]} rotation={[-Math.PI / 2, 0, 0]} >
-            {Mecury}
+          <group
+            position={[-0.042, -0.46, 2.257]}
+            rotation={[-0.07, 0, 0]}
+          >
+            <Orbit 
+              a={9.5}
+              b={12}
+            />
+            <group ref={mercuryRef}>
+              {Mecury}
+            </group>
           </group>
 
-          {/* This is Venus */}
-          <group position={[-5.181, -0.218, 11.591]} rotation={[-Math.PI / 2, 0, 0]}>
-            {Venus}
-          </group>
-
-          {/* This is Earth */}
-          {Earth}
-          
-          {/* This is Moon */}
-          {Moon}
-
-          {/* This is Mars */}
-          {Mars}
-
-          {/* This is Uranus */}
-          {Uranus}
-
-          {/* This is Uranus */}
-          {Pluto}
-
-          {/* This is Jupiter */}
-          {Jupiter}
-
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle005__0 as THREE.Mesh).geometry}
-            position={[-0.042, -0.454, 2.257]}
-            rotation={[-1.641, 0, 0]}
-            scale={[0.218, 0.277, 0.225]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle006__0 as THREE.Mesh).geometry}
+          <group
             position={[-0.24, 0.029, 2.251]}
-            rotation={[-1.535, 0, 0]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle007__0 as THREE.Mesh).geometry}
-            position={[-0.24, -0.137, 1.999]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle008__0 as THREE.Mesh).geometry}
+            rotation={[0.035, 0, 0]}
+          >
+            <Orbit 
+              a={12}
+              b={15}
+            />
+            <group ref={venusRef}>
+              {Venus}
+            </group>
+          </group>
+
+          <group
+            position={[-0.25, -0.137, 1.999]}
+            rotation={[0.00, 0, 0]}
+          >
+            <Orbit 
+              a={15.5}
+              b={19}
+            />
+            <group ref={earthRef}>
+              {Earth}
+              {Moon}
+            </group>
+          </group>
+
+          <group
             position={[-0.438, -0.853, 2.035]}
-            rotation={[-1.648, 0, 0]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle009__0 as THREE.Mesh).geometry}
+            rotation={[-0.075, 0, 0]}
+          >
+            <Orbit 
+              a={19.5}
+              b={24}
+            />
+            <group ref={marsRef}>
+              {Mars}
+            </group>
+          </group>
+
+          <group
             position={[-0.439, -1.254, 1.832]}
-            rotation={[-1.684, 0.077, 0.009]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle010__0 as THREE.Mesh).geometry}
+            rotation={[-0.11, 0.1, -0.08]}
+          >
+            <Orbit 
+              a={25}
+              b={31}
+            />
+            <group ref={jupiterRef}>
+              {Jupiter}
+            </group>
+          </group>
+
+          <group
             position={[-0.287, -1.812, 1.841]}
-            rotation={[-1.659, -0.08, -0.007]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle011__0 as THREE.Mesh).geometry}
+            rotation={[-0.09, 0.03, 0.09]}
+          >
+            <Orbit 
+              a={30}
+              b={38}
+            />
+            <group ref={saturnRef}>
+              {Saturn}
+              <SaturnRing position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} scale={2} />
+            </group>
+          </group>
+
+          <group
             position={[-0.402, -1.661, 1.69]}
-            rotation={[-1.643, -0.08, -0.006]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle012__0 as THREE.Mesh).geometry}
+            rotation={[-0.08, 0.1, 0.08]}
+          >
+            <Orbit 
+              a={36}
+              b={44}
+            />
+            <group ref={uranusRef}>
+              {Uranus}
+            </group>
+          </group>
+
+          <group
             position={[-0.537, -3.134, 1.779]}
-            rotation={[-1.674, 0.096, 0]}
-            scale={[0.189, 0.24, 0.195]}
-          />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle013__0 as THREE.Mesh).geometry}
+            rotation={[-0.11, -0.09, -0.09]}
+          >
+            <Orbit 
+              a={42}
+              b={52}
+            />
+            <group ref={neptuneRef}>
+              {Neptune}
+            </group>
+          </group>
+
+          <group
             position={[-0.195, -3.418, 1.993]}
-            rotation={[-1.702, -0.096, -0.013]}
-            scale={[0.189, 0.24, 0.195]}
-          />
+            rotation={[-0.12, -0.1, 0.1]}
+          >
+            <Orbit 
+              a={48}
+              b={58}
+            />
+            <group ref={plutoRef}>
+              {Pluto}
+            </group>
+          </group>
 
           <Sun />
           <pointLight ref={lightRef} color="0xFFFFFF" intensity={4} distance={100} position={[0, 0, 0]}/>
-
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.Circle014__0 as THREE.Mesh).geometry}
-            position={[-0.24, -0.137, 33.567]}
-            rotation={[-1.501, -0.429, -0.081]}
-            scale={[0.349, 0.746, 0.195]}
-          />
-          
-          {
-          /* Asteroids 
+{/* 
           <mesh
             castShadow
             receiveShadow
             geometry={(nodes.asteroides__0 as THREE.Mesh).geometry}
             material={materials.Circle005__0}
-            position={[-17.149, 12.114, 8.764]}
+            position={[0, 0, 0]}
             rotation={[-1.674, 1.134, -1.727]}
-            scale={[-1, 1, 1]}
+            scale={[-5, 5, 5]}
           /> */}
         </group>
       </group>
     </group>
   )
 }
-
-useGLTF.preload('/scene.gltf')
 
 export default SolarSystem

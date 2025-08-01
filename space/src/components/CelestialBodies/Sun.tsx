@@ -1,7 +1,6 @@
 'use client'
 
 import { useTexture } from '@react-three/drei'
-import { SunPos } from '../data/data'
 
 type Props = {
     children?: React.ReactNode;
@@ -15,7 +14,7 @@ const Sun = (props: Props) => {
       receiveShadow
       castShadow
       position={[0, 0, 0]}
-      rotation={[-Math.PI / 2, 0, Math.PI / 9]}
+      rotation={[0, 0, 0]}
       scale={5}
     >
       <sphereGeometry args={[1, 64, 64]} />

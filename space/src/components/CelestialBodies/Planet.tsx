@@ -25,9 +25,6 @@ const Planet = ({ texturePath, position, rotation, scale, children }: Props) => 
       <sphereGeometry args={[1, 64, 64]} />
       <meshStandardMaterial
           map={texture}
-          // emissiveMap={texture}
-          // emissive="#ffffff"
-          // emissiveIntensity={2}
       />
     </mesh>
   )
