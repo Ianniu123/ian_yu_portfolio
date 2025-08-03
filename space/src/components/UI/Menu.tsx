@@ -34,6 +34,14 @@ const Menu = ({}: Props) => {
 
   return (
     <div>
+      <style jsx>{`        
+        .menu-color {
+          fill: #082e42;
+          stroke: rgba(42,241,255,.439);
+          stroke-width: 3;
+          filter: drop-shadow(0 0 3px #2af1ffd0);
+        }
+      `}</style>
       <motion.svg
         viewBox="0 0 300 300"
         width="300"
