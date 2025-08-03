@@ -1,4 +1,5 @@
 'use client'
+import { motion } from "framer-motion";
 
 type Props = {
     handleOpen: () => void;
@@ -6,7 +7,9 @@ type Props = {
 
 const MenuOpenButton = ({ handleOpen }: Props) => {
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.8 }}
       onClick={handleOpen}
       className="relative flex items-center justify-center rounded-full overflow-hidden"
     >
@@ -22,7 +25,7 @@ const MenuOpenButton = ({ handleOpen }: Props) => {
           <span className="w-6 h-1 bg-cyan-400" />
           <span className="w-6 h-1 bg-cyan-400" />
         </div>
-    </button>
+    </motion.button>
   );
 }
 

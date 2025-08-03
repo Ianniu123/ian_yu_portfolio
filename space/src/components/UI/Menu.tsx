@@ -110,7 +110,12 @@ const Menu = ({}: Props) => {
                 transformOrigin: `${x}px ${y}px`
               }}
             >
-              <div className="relative group w-full h-full flex justify-center items-center">
+              <motion.div 
+                className="relative group w-full h-full flex justify-center items-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                
                 {/* Neon SVG Border */}
                 <motion.svg
                   className="absolute opacity-0 group-hover:opacity-100"
@@ -123,15 +128,13 @@ const Menu = ({}: Props) => {
                     strokeWidth="2"
                     fill="none"
                     filter="url(#neon)"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
                   />
                 </motion.svg>
 
                 <button className={`text-cyan-400 text-xl ${orbitron.className}`}>
                   {section.text}
                 </button>
-              </div>
+              </motion.div>
             </foreignObject>
           );
         })}
