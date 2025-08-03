@@ -271,7 +271,7 @@ const SolarSystem = (props: Props) => {
           </group>
 
           <Sun />
-          <pointLight ref={lightRef} color="0xFFFFFF" intensity={4} distance={100} position={[0, 0, 0]}/>
+          <pointLight ref={lightRef} color="#ffffff" intensity={4} distance={1000} position={[0, 0, 0]}/>
 {/* 
           <mesh
             castShadow

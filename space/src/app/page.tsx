@@ -1,10 +1,12 @@
-import RenderSolarSystem from "../components/RenderSolarSystem"
+import RenderSolarSystem from "../components/RenderSolarSystem";
+import Overlay from "../components/UI/Overlay";
 
 export default function Home() {
   return (
-    <div>
-      <div className='w-screen h-screen flex items-center justify-center'>
+    <div className="w-screen">
+      <div className="relative w-screen h-screen">
         <RenderSolarSystem />
+        <Overlay />
       </div>
     </div>
   );

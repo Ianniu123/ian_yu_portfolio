@@ -1,7 +1,6 @@
 'use client'
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars, Sparkles } from "@react-three/drei";
-import clsx from "clsx";
+import { OrbitControls, Stars } from "@react-three/drei";
 import React, { useEffect, useState } from "react";
 import dynamic from 'next/dynamic'
 import { EffectComposer, Bloom, ChromaticAberration, Vignette } from '@react-three/postprocessing'
@@ -39,16 +38,6 @@ export default function RenderSolarSystem() {
                 saturation={0}
                 fade
                 speed={0.5}
-            />
-            
-            {/* Additional sparkles for cosmic effect */}
-            <Sparkles 
-                count={100}
-                scale={200}
-                size={2}
-                speed={0.3}
-                opacity={0.3}
-                color="#ffffff"
             />
 
             <SolarSystem />
