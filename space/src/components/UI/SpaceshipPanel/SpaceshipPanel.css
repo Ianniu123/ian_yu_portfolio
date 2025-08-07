@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap");
+
+.spaceship-panel {
+  width: 900px;
+  max-width: 95vw;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 40, 60, 0.9) 0%,
+    rgba(0, 60, 80, 0.8) 100%
+  );
+  border: 2px solid #00ffff;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  font-family: "Orbitron", monospace;
+  color: #00ffff;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh; /* Or any max height you prefer, e.g., 700px */
+}
+
+.panel-header, .bottom-controls {
+  flex-shrink: 0; /* Prevents header and footer from shrinking */
+}
+
+.panel-header {
+  position: relative;
+  padding: 20px 30px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.2) 0%,
+    transparent 70%
+  );
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ffff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-icon {
+  line-height: 1;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 5px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #ffaa00;
+  font-weight: 400;
+  text-shadow: 0 0 5px rgba(255, 170, 0, 0.6);
+  margin: 5px 0 0 0;
+}
+
+.panel-content {
+  display: flex;
+  padding: 30px;
+  gap: 40px;
+  flex-grow: 1;      /* Allows content to fill available space */
+  overflow-y: auto;  /* Enables vertical scrolling ONLY when needed */
+}
+
+.panel-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+  background: rgba(0, 40, 60, 0.5); /* Dark, transparent track */
+  border-radius: 10px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background-color: #00ffff; /* Themed scrollbar handle */
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+  background-color: #55ffff; /* Brighter on hover */
+  box-shadow: 0 0 15px rgba(0, 255, 255, 1);
+}
+
+.left-section,
+.right-section {
+  flex: 1;
+}
+
+.welcome-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+}
+
+.description,
+.navigation-text,
+.enjoy-text,
+.experience-text,
+.vr-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #ffffff;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.go-button {
+  background: linear-gradient(135deg, #00ffff 0%, #0088cc 100%);
+  border: 2px solid #00ffff;
+  border-radius: 10px;
+  color: #000;
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.go-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+  background: linear-gradient(135deg, #33ffff 0%, #00aaff 100%);
+}
+
+.go-button:active {
+  transform: translateY(0);
+}
+
+.disclaimer {
+  font-size: 0.7rem;
+  color: #888;
+  font-style: italic;
+}
+
+.bottom-controls {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.open-map-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 255, 0.2) 0%,
+    rgba(0, 200, 200, 0.3) 100%
+  );
+  border: 2px solid #00ffff;
+  border-radius: 25px;
+  color: #00ffff;
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.open-map-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 255, 0.4) 0%,
+    rgba(0, 200, 200, 0.5) 100%
+  );
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.open-map-btn:active {
+  transform: translateY(0);
+}

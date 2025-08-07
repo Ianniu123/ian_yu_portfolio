@@ -5,14 +5,16 @@ import { useState } from "react";
 import { MenuOpenButton, MenuCloseButton } from "./MenuButton/MenuButton";
 import { Orbitron } from "next/font/google";
 
-type Props = {}
+type Props = {
+  onCloseAndSwitch: (panel: string) => void;
+};
 
 const orbitron = Orbitron({
   subsets: ['latin'],
   weight: ['600'],
 })
 
-const Menu = ({}: Props) => {
+const Menu = ({ onCloseAndSwitch }: Props) => {
   const controls = useAnimation();
   const [open, toggleOpen] = useState(false);
 
@@ -111,11 +113,11 @@ const Menu = ({}: Props) => {
               }}
             >
               <motion.div 
-                className="relative group w-full h-full flex justify-center items-center"
+                className={`relative group text-cyan-400 text-xl ${orbitron.className} w-full h-full flex justify-center items-center`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => onCloseAndSwitch(section.text)}
               >
-                
                 {/* Neon SVG Border */}
                 <motion.svg
                   className="absolute opacity-0 group-hover:opacity-100"
@@ -131,9 +133,8 @@ const Menu = ({}: Props) => {
                   />
                 </motion.svg>
 
-                <button className={`text-cyan-400 text-xl ${orbitron.className}`}>
-                  {section.text}
-                </button>
+                {section.text}
+              
               </motion.div>
             </foreignObject>
           );
