@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap");
+
+.container {
+  position: fixed;
+  inset: 0;
+  /* Much darker space background */
+  background: linear-gradient(
+    135deg,
+    #000000 0%,
+    #0a0a0a 30%,
+    #1a1a1a 70%,
+    #000000 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Orbitron", monospace;
+}
+
+.content {
+  text-align: center;
+  padding: 25px;
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Loading Icon Styles */
+.loadingIcon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.outerRing {
+  width: 128px;
+  height: 128px;
+  border: 2px solid rgba(0, 255, 255, 0.4); /* Slightly more visible against dark bg */
+  border-radius: 50%;
+  position: relative;
+}
+
+.orbitalDot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #00ffff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8); /* Enhanced glow for dark space */
+}
+
+.topDot {
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rightDot {
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+}
+
+.bottomDot {
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.orangeDot {
+  background: #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.8); /* Enhanced glow */
+}
+
+.pulsingCore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(to right, #00ffff, #0088ff);
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 1),
+    inset 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.energyRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.ring1 {
+  width: 80px;
+  height: 80px;
+}
+
+.ring2 {
+  width: 96px;
+  height: 96px;
+}
+
+/* Text Styles */
+.textSection {
+  margin-bottom: 32px;
+}
+
+.loadingTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00ffff;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.8); /* Enhanced glow */
+}
+
+.loadingMessage {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8); /* Slightly dimmer text */
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* Progress Bar Styles */
+.progressSection {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 32px;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(0, 255, 255, 0.9);
+  margin-bottom: 12px;
+}
+
+.progressBarContainer {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.8); /* Darker progress background */
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(to right, #00ffff, #0088ff, #00ffff);
+  border-radius: 4px;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+.progressShimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .loadingTitle {
+    font-size: 1.5rem;
+  }
+
+  .loadingMessage {
+    font-size: 0.875rem;
+  }
+
+  .outerRing {
+    width: 96px;
+    height: 96px;
+  }
+
+  .ring1 {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ring2 {
+    width: 72px;
+    height: 72px;
+  }
+}
