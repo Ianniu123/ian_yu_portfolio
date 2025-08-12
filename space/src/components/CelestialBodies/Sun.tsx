@@ -2,11 +2,7 @@
 
 import { useTexture } from '@react-three/drei'
 
-type Props = {
-    children?: React.ReactNode;
-}
-
-const Sun = (props: Props) => {
+const Sun = () => {
   const texture = useTexture("/textures/2k_sun.jpg")
 
   return (

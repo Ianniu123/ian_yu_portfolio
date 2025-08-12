@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Variants, motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { Variants, motion } from 'framer-motion';
 import './SpaceshipPanel.css';
 import { PanelName, ui } from '@/state/ui';
 

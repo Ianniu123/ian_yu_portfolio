@@ -5,7 +5,6 @@ import React, { useEffect, useState, useRef } from "react";
 import dynamic from 'next/dynamic'
 import { EffectComposer, Bloom, ChromaticAberration, Vignette } from '@react-three/postprocessing'
 import CameraController from './CameraController'
-import * as THREE from 'three'
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 
 const SolarSystem = dynamic(() => import("./SolarSystem"), {
