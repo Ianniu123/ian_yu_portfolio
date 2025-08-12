@@ -94,7 +94,7 @@ const SolarSystem = (props: Props) => {
       ui.hoverTitle = '';
       ui.hoverSubtitle = '';
     }
-  }, [hoveredPlanet, mapping]);
+  }, [hoveredPlanet]);
 
   const handlePlanetClick = (name?: string) => {
     // Map planet names to panels. Adjust as desired.
