@@ -4,22 +4,21 @@ import { motion, useAnimation } from "framer-motion";
 import { useState } from "react";
 import { MenuOpenButton, MenuCloseButton } from "./MenuButton/MenuButton";
 import { Orbitron } from "next/font/google";
-
-type Props = {
-  onCloseAndSwitch: (panel: string) => void;
-};
+import { ui, onCloseAndSwitch, PanelName } from '@/state/ui';
+import { useSnapshot } from 'valtio';
 
 const orbitron = Orbitron({
   subsets: ['latin'],
   weight: ['600'],
 })
 
-const Menu = ({ onCloseAndSwitch }: Props) => {
+const Menu = () => {
   const controls = useAnimation();
   const [open, toggleOpen] = useState(false);
 
-  const sections = [
-    { text: "Home", angle: -110 },
+  const snap = useSnapshot(ui);
+
+  const sections: { text: PanelName; angle: number }[] = [
     { text: "About Me", angle: -125 },
     { text: "Experience", angle: -140 },
     { text: "Projects", angle: -155 },
@@ -97,8 +96,8 @@ const Menu = ({ onCloseAndSwitch }: Props) => {
         {sections.map((section) => {
           const radius = 250;
           const angleRad = (section.angle * Math.PI) / 180 + Math.PI;
-          const x = 100 + radius * Math.cos(angleRad) - 10;
-          const y = 100 + radius * Math.sin(angleRad);
+          const x = 60 + radius * Math.cos(angleRad);
+          const y = 110 + radius * Math.sin(angleRad);
 
           return (
             <foreignObject
@@ -117,6 +116,10 @@ const Menu = ({ onCloseAndSwitch }: Props) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onCloseAndSwitch(section.text)}
+                style={{
+                  pointerEvents: snap.isTransitioning ? 'none' : 'auto',   // “disable” divs
+                  opacity: snap.isTransitioning ? 0.6 : 1,
+                }}
               >
                 {/* Neon SVG Border */}
                 <motion.svg

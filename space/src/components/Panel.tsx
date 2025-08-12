@@ -20,7 +20,7 @@ const Panel = () => {
 
         return prev + 10;
       })
-    }, 10000)
+    }, 300)
 
     return () => clearInterval(timer);
   }, [])

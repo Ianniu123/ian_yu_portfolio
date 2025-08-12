@@ -3,7 +3,6 @@
 import React from 'react';
 import { Vector3, Euler } from '@react-three/fiber';
 import { DoubleSide } from 'three';
-import { RADIUS_SCALE, DISTANCE_SCALE } from '../data/data';
 
 type RingProps = {
     position: Vector3,

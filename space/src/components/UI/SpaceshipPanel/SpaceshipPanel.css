@@ -67,20 +67,13 @@
   margin: 0;
 }
 
-.subtitle {
-  font-size: 1rem;
-  color: #ffaa00;
-  font-weight: 400;
-  text-shadow: 0 0 5px rgba(255, 170, 0, 0.6);
-  margin: 5px 0 0 0;
-}
-
 .panel-content {
   display: flex;
   padding: 30px;
   gap: 40px;
   flex-grow: 1;      /* Allows content to fill available space */
   overflow-y: auto;  /* Enables vertical scrolling ONLY when needed */
+  height: 500px
 }
 
 .panel-content::-webkit-scrollbar {
@@ -104,15 +97,16 @@
   box-shadow: 0 0 15px rgba(0, 255, 255, 1);
 }
 
-.left-section,
-.right-section {
-  flex: 1;
-}
 
 .welcome-text {
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 20px;
+  color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+}
+
+.unnormal-text {
   color: #ffaa00;
   text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
 }
@@ -127,33 +121,6 @@
   margin-bottom: 15px;
   color: #ffffff;
   text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
-}
-
-.go-button {
-  background: linear-gradient(135deg, #00ffff 0%, #0088cc 100%);
-  border: 2px solid #00ffff;
-  border-radius: 10px;
-  color: #000;
-  font-family: "Orbitron", monospace;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 12px 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 20px 0;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-}
-
-.go-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
-  background: linear-gradient(135deg, #33ffff 0%, #00aaff 100%);
-}
-
-.go-button:active {
-  transform: translateY(0);
 }
 
 .disclaimer {
@@ -200,4 +167,30 @@
 
 .open-map-btn:active {
   transform: translateY(0);
+}
+
+/* Social links on About */
+.social-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.social-links .social-link {
+  color: #fdfdfd;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  border-radius: 50%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.social-links .social-link:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
 }

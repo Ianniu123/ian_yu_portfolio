@@ -1,13 +1,14 @@
 'use client'
 
-import React, { useRef } from 'react'
-import { useHelper } from '@react-three/drei'
+import React, { useRef, useEffect } from 'react'
+// import { useHelper } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import Sun from './CelestialBodies/Sun'
 import Planet from './CelestialBodies/Planet'
 import SaturnRing from './CelestialBodies/SaturnRing'
 import Orbit from './CelestialBodies/Orbit'
 import * as THREE from 'three';
+import { onCloseAndSwitch, PanelName, ui } from '@/state/ui'
 
 type Props = {
   children?: React.ReactNode;
@@ -28,8 +29,8 @@ const SolarSystem = (props: Props) => {
   const neptuneRef = useRef<THREE.Group>(null!)
   const plutoRef = useRef<THREE.Group>(null!)
 
-  // Random starting angles for each planet
-  const [planetAngles] = React.useState(() => ({
+  // Random starting angles for each planet; accumulated using delta each frame
+  const anglesRef = useRef({
     mercury: Math.random() * Math.PI * 2,
     venus: Math.random() * Math.PI * 2,
     earth: Math.random() * Math.PI * 2,
@@ -39,7 +40,7 @@ const SolarSystem = (props: Props) => {
     uranus: Math.random() * Math.PI * 2,
     neptune: Math.random() * Math.PI * 2,
     pluto: Math.random() * Math.PI * 2,
-  }))
+  })
 
   // Axial tilts for each planet (in radians)
   const axialTilts = {
@@ -54,92 +55,179 @@ const SolarSystem = (props: Props) => {
     pluto: 0.299,   // ~17.1°
   }
 
-  const Neptune = <Planet texturePath='textures/2k_neptune.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.35} />
-  const Saturn = <Planet texturePath='textures/2k_saturn.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.6} />
-  const Mecury = <Planet texturePath='textures/2k_mercury.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={0.9}/>
-  const Venus = <Planet texturePath='textures/2k_venus_surface.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.14} />
-  const Earth = <Planet texturePath='textures/2k_earth_daymap.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.27} />
-  const Moon = <Planet texturePath='textures/2k_moon.jpg' position={[-1, 1.221, 1]} rotation={[0, 0, 0]} scale={0.35} />
-  const Mars = <Planet texturePath='textures/2k_mars.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.14} />
-  const Uranus = <Planet texturePath='textures/2k_uranus.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.4} />
-  const Pluto = <Planet texturePath='textures/PlutoColour.webp' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={0.65} />
-  const Jupiter = <Planet texturePath='textures/2k_jupiter.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.69} />
+  const mapping: Record<string, string> = {
+    Mercury: 'Mecury',
+    Venus: 'Venus',
+    Earth: 'About Me',
+    Mars: 'Experience',
+    Jupiter: 'Jupiter',
+    Saturn: 'Projects',
+    Uranus: 'Other',
+    Neptune: 'Neptune',
+    Pluto: 'Pluto',
+    Moon: 'Moon',
+  }
+
+  const [hoveredPlanet, setHoveredPlanet] = React.useState<string | null>(null);
+  const orbitsPaused = hoveredPlanet !== null; // derived, always correct
+
+  const handlePlanetHoverChange = (hovered: boolean, name?: string) => {
+    // Ignore noisy events with no name
+    if (!name) return;
+  
+    if (hovered) {
+      setHoveredPlanet(name);
+      return; // UI text handled by effect below
+    }
+  
+    // Only clear if we're leaving the currently hovered planet
+    setHoveredPlanet(prev => (prev === name ? null : prev));
+  };
+  
+  // Single source of truth for the top status bar text
+  useEffect(() => {
+    if (hoveredPlanet) {
+      ui.hoverTitle = hoveredPlanet;
+      const panel = mapping[hoveredPlanet];
+      ui.hoverSubtitle = panel ? `Open: ${panel}` : '';
+    } else {
+      ui.hoverTitle = '';
+      ui.hoverSubtitle = '';
+    }
+  }, [hoveredPlanet]);
+
+  const handlePlanetClick = (name?: string) => {
+    // Map planet names to panels. Adjust as desired.
+    const mapping: Record<string, PanelName> = {
+      Mercury: 'About Me',
+      Venus: 'Experience',
+      Earth: 'Projects',
+      Mars: 'Other',
+      Jupiter: 'Experience',
+      Saturn: 'Projects',
+      Uranus: 'Other',
+      Neptune: 'About Me',
+      Pluto: 'Other',
+      Moon: 'Projects',
+    }
+    const target = name ? mapping[name] ?? 'About Me' : 'About Me'
+    onCloseAndSwitch(target)
+  }
+
+  const Neptune = <Planet name='Neptune' indicatorActive={hoveredPlanet === 'Neptune'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_neptune.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.35} />
+  const Saturn = <Planet name='Saturn' indicatorActive={hoveredPlanet === 'Saturn'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_saturn.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.6} />
+  const Mecury = <Planet name='Mercury' indicatorActive={hoveredPlanet === 'Mercury'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_mercury.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={0.9}/>
+  const Venus = <Planet name='Venus' indicatorActive={hoveredPlanet === 'Venus'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_venus_surface.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.14} />
+  const Earth = <Planet name='Earth' indicatorActive={hoveredPlanet === 'Earth'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_earth_daymap.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.27} />
+  const Moon = <Planet name='Moon' indicatorActive={hoveredPlanet === 'Moon'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_moon.jpg' position={[-1, 1.221, 1]} rotation={[0, 0, 0]} scale={0.35} />
+  const Mars = <Planet name='Mars' indicatorActive={hoveredPlanet === 'Mars'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_mars.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.14} />
+  const Uranus = <Planet name='Uranus' indicatorActive={hoveredPlanet === 'Uranus'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_uranus.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.4} />
+  const Pluto = <Planet name='Pluto' indicatorActive={hoveredPlanet === 'Pluto'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/PlutoColour.webp' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={0.65} />
+  const Jupiter = <Planet name='Jupiter' indicatorActive={hoveredPlanet === 'Jupiter'} onHoverChange={handlePlanetHoverChange} onClick={handlePlanetClick} texturePath='textures/2k_jupiter.jpg' position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.69} />
   // Add a helper to visualize the directional light
-  useHelper(lightRef, THREE.PointLightHelper, 10, 'red')
+  // useHelper(lightRef, THREE.PointLightHelper, 10, 'red')
 
   useFrame((state, delta) => {
+    if (orbitsPaused) return
     
-    // Animate planet positions along their orbits
+    // Orbital angular velocities (radians per second approx)
+    const orbitSpeed = {
+      mercury: 0.5,
+      venus: 0.4,
+      earth: 0.3,
+      mars: 0.25,
+      jupiter: 0.15,
+      saturn: 0.12,
+      uranus: 0.08,
+      neptune: 0.06,
+      pluto: 0.04,
+    }
+
+    // Spin angular velocities (radians per second approx)
+    const spinSpeed = {
+      mercury: 0.5,
+      venus: -0.02,
+      earth: 1.0,
+      mars: 0.97,
+      jupiter: 2.4,
+      saturn: 2.1,
+      uranus: 1.4,
+      neptune: 1.6,
+      pluto: 0.15,
+    }
+
+    // Integrate angles
+    anglesRef.current.mercury += orbitSpeed.mercury * delta
+    anglesRef.current.venus += orbitSpeed.venus * delta
+    anglesRef.current.earth += orbitSpeed.earth * delta
+    anglesRef.current.mars += orbitSpeed.mars * delta
+    anglesRef.current.jupiter += orbitSpeed.jupiter * delta
+    anglesRef.current.saturn += orbitSpeed.saturn * delta
+    anglesRef.current.uranus += orbitSpeed.uranus * delta
+    anglesRef.current.neptune += orbitSpeed.neptune * delta
+    anglesRef.current.pluto += orbitSpeed.pluto * delta
+
     if (mercuryRef.current) {
-      const angle = planetAngles.mercury + state.clock.elapsedTime * 0.5
+      const angle = anglesRef.current.mercury
       mercuryRef.current.position.x = 9.5 * Math.cos(angle)
       mercuryRef.current.position.z = 12 * Math.sin(angle)
-      // Add axial rotation
-      mercuryRef.current.rotation.y = state.clock.elapsedTime * 0.5
+      mercuryRef.current.rotation.y += spinSpeed.mercury * delta
       mercuryRef.current.rotation.x = axialTilts.mercury
     }
     if (venusRef.current) {
-      const angle = planetAngles.venus + state.clock.elapsedTime * 0.4
+      const angle = anglesRef.current.venus
       venusRef.current.position.x = 12 * Math.cos(angle)
       venusRef.current.position.z = 15 * Math.sin(angle)
-      // Venus rotates very slowly (retrograde)
-      venusRef.current.rotation.y = -state.clock.elapsedTime * 0.02
+      venusRef.current.rotation.y += spinSpeed.venus * delta
       venusRef.current.rotation.x = axialTilts.venus
     }
     if (earthRef.current) {
-      const angle = planetAngles.earth + state.clock.elapsedTime * 0.3
+      const angle = anglesRef.current.earth
       earthRef.current.position.x = 15.5 * Math.cos(angle)
       earthRef.current.position.z = 19 * Math.sin(angle)
-      // Earth's rotation
-      earthRef.current.rotation.y = state.clock.elapsedTime * 1.0
+      earthRef.current.rotation.y += spinSpeed.earth * delta
       earthRef.current.rotation.x = axialTilts.earth
     }
     if (marsRef.current) {
-      const angle = planetAngles.mars + state.clock.elapsedTime * 0.25
+      const angle = anglesRef.current.mars
       marsRef.current.position.x = 19.5 * Math.cos(angle)
       marsRef.current.position.z = 24 * Math.sin(angle)
-      // Mars rotation
-      marsRef.current.rotation.y = state.clock.elapsedTime * 0.97
+      marsRef.current.rotation.y += spinSpeed.mars * delta
       marsRef.current.rotation.x = axialTilts.mars
     }
     if (jupiterRef.current) {
-      const angle = planetAngles.jupiter + state.clock.elapsedTime * 0.15
+      const angle = anglesRef.current.jupiter
       jupiterRef.current.position.x = 25 * Math.cos(angle)
       jupiterRef.current.position.z = 31 * Math.sin(angle)
-      // Jupiter's fast rotation
-      jupiterRef.current.rotation.y = state.clock.elapsedTime * 2.4
+      jupiterRef.current.rotation.y += spinSpeed.jupiter * delta
       jupiterRef.current.rotation.x = axialTilts.jupiter
     }
     if (saturnRef.current) {
-      const angle = planetAngles.saturn + state.clock.elapsedTime * 0.12
+      const angle = anglesRef.current.saturn
       saturnRef.current.position.x = 30 * Math.cos(angle)
       saturnRef.current.position.z = 38 * Math.sin(angle)
-      // Saturn's rotation
-      saturnRef.current.rotation.y = state.clock.elapsedTime * 2.1
+      saturnRef.current.rotation.y += spinSpeed.saturn * delta
       saturnRef.current.rotation.x = axialTilts.saturn
     }
     if (uranusRef.current) {
-      const angle = planetAngles.uranus + state.clock.elapsedTime * 0.08
+      const angle = anglesRef.current.uranus
       uranusRef.current.position.x = 36 * Math.cos(angle)
       uranusRef.current.position.z = 44 * Math.sin(angle)
-      // Uranus rotates on its side
-      uranusRef.current.rotation.y = state.clock.elapsedTime * 1.4
+      uranusRef.current.rotation.y += spinSpeed.uranus * delta
       uranusRef.current.rotation.x = axialTilts.uranus
     }
     if (neptuneRef.current) {
-      const angle = planetAngles.neptune + state.clock.elapsedTime * 0.06
+      const angle = anglesRef.current.neptune
       neptuneRef.current.position.x = 42 * Math.cos(angle)
       neptuneRef.current.position.z = 52 * Math.sin(angle)
-      // Neptune's rotation
-      neptuneRef.current.rotation.y = state.clock.elapsedTime * 1.6
+      neptuneRef.current.rotation.y += spinSpeed.neptune * delta
       neptuneRef.current.rotation.x = axialTilts.neptune
     }
     if (plutoRef.current) {
-      const angle = planetAngles.pluto + state.clock.elapsedTime * 0.04
+      const angle = anglesRef.current.pluto
       plutoRef.current.position.x = 48 * Math.cos(angle)
       plutoRef.current.position.z = 58 * Math.sin(angle)
-      // Pluto's slow rotation
-      plutoRef.current.rotation.y = state.clock.elapsedTime * 0.15
+      plutoRef.current.rotation.y += spinSpeed.pluto * delta
       plutoRef.current.rotation.x = axialTilts.pluto
     }
   })
@@ -272,16 +360,7 @@ const SolarSystem = (props: Props) => {
 
           <Sun />
           <pointLight ref={lightRef} color="#ffffff" intensity={4} distance={1000} position={[0, 0, 0]}/>
-{/* 
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={(nodes.asteroides__0 as THREE.Mesh).geometry}
-            material={materials.Circle005__0}
-            position={[0, 0, 0]}
-            rotation={[-1.674, 1.134, -1.727]}
-            scale={[-5, 5, 5]}
-          /> */}
+
         </group>
       </group>
     </group>

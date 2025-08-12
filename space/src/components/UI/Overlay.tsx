@@ -1,47 +1,48 @@
 'use client'
 
 import Menu from "./Menu"
-import { useState } from 'react'
 import SpaceshipPanel from "./SpaceshipPanel/SpaceshipPanel"
+import TopStatusBar from "./TopStatusBar"
+import HomeButton from "./HomeButton"
+
 import { AnimatePresence } from 'framer-motion'
+import { useSnapshot } from 'valtio';
+import { ui, closePanel, handleExitComplete, PanelName } from '@/state/ui';
+import { About, Experience, Projects, Other } from '@/components/Content/Content'
 
-type Props = {}
+type ConcretePanel = Exclude<PanelName, null>;
 
-const Overlay = ({}: Props) => {
-  const [panel, setActivePanel] = useState<string | null>(null)
-  const [nextPanel, setNextPanel] = useState<string | null>(null)
+// Map each panel to what should render inside the panel shell
+const contentByPanel: Record<ConcretePanel, React.ReactNode> = {
+  'Home': null,
+  'About Me': <About />,
+  'Experience': <Experience />,
+  'Projects': <Projects />,
+  'Other': <Other />,
+};
 
-  const onClose = () => {
-    setActivePanel(null)
-  }
-
-  const onCloseAndSwitch = (section: string) => {
-    if (panel === section) return;  // If clicking the same panel, do nothing.
-    if (panel === null) {
-      setActivePanel(section)
-      return
-    } else {
-      setNextPanel(section);
-      setActivePanel(null);  // Trigger exit animation first.
-    }
-  }
-
-  const handleExitComplete = () => {
-    if (nextPanel) {
-      setActivePanel(nextPanel);
-      setNextPanel(null);  // Reset nextPanel.
-    }
-  }
-
+const Overlay = () => {
+  const snap = useSnapshot(ui);
   return (
     <div>
+      <TopStatusBar />
+      <HomeButton />
       <div className="fixed -bottom-51 -right-51">
-        <Menu onCloseAndSwitch={onCloseAndSwitch} />
+        <Menu />
       </div>
 
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <AnimatePresence onExitComplete={handleExitComplete}>
-          {panel && <SpaceshipPanel key={panel} onClose={onClose} />}
+          {
+            snap.panel && 
+            <SpaceshipPanel 
+              key={snap.panel} 
+              section={snap.panel} 
+              onClose={closePanel}
+            >
+              {contentByPanel[snap.panel]}
+            </SpaceshipPanel>
+          }
         </AnimatePresence>
       </div>
     </div>

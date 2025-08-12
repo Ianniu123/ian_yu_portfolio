@@ -34,6 +34,9 @@ const Orbit: React.FC<OrbitProps> = ({
       color={color}
       lineWidth={1} // Only visible with Line2, not native WebGL1
       dashed={false}
+      // Prevent orbit line from capturing pointer events
+      // so planets behind can still receive hover/click
+      raycast={() => null}
     />
   )
 }
