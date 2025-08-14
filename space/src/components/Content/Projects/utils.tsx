@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable react-hooks/exhaustive-deps */
 
 import * as THREE from 'three'
 import { extend } from '@react-three/fiber'
