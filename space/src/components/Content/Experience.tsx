@@ -62,7 +62,7 @@ const Experience = () => {
             >
               <h3 className="text-xl font-semibold tracking-wide">B.Sc. Computer Science</h3>
               <h4 className="text-sm opacity-80">Carleton University</h4>
-              <p className="text-sm">Computer Science Major. Mathematics Minor. Artificial Intelligence/Machine Learning stream,.</p>
+              <p className="text-sm">Computer Science Major. Mathematics Minor. Artificial Intelligence/Machine Learning stream.</p>
             </VerticalTimelineElement>
 
             <VerticalTimelineElement iconStyle={itemStyles.icon} icon={<FaStar />} />

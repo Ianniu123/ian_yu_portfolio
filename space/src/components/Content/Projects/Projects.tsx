@@ -128,19 +128,18 @@ const Carousel = ({ radius = 0.8, count = 5 }) => {
 
   return (
     <>
-      {Array.from({ length: count }, (_, i) => (
-        <Card
-          key={i}
-          url={`/images/img${Math.floor(i % 10) + 1}_.jpg`}
-          position={[
-            Math.sin((i / count) * Math.PI * 2) * radius,
-            0,
-            Math.cos((i / count) * Math.PI * 2) * radius
-          ]}
-          rotation={[0, Math.PI + (i / count) * Math.PI * 2, 0]}
-          link={links[i]}
-        />
-      ))}
+      {Array.from({ length: count }, (_, i) => {
+        const theta = (i / count) * Math.PI * 2
+        return (
+          <Card
+            key={i}
+            url={`/images/img${Math.floor(i % 10) + 1}_.jpg`}
+            position={[Math.sin(theta) * radius, 0, Math.cos(theta) * radius]}
+            rotation={[0, theta, 0]}  // <-- removed Math.PI
+            link={links[i]}
+          />
+        )
+      })}
     </>
   )
 }
