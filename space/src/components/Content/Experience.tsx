@@ -27,42 +27,42 @@ const Experience = () => {
         <div style={{ width: "100%" }}>
           <VerticalTimeline lineColor="#00ffff" layout="2-columns">
             <VerticalTimelineElement
-              className="vertical-timeline-element--work"
-              date="2024 — Present"
+              className=""
+              date="2025 — Present"
               contentStyle={itemStyles.content}
               contentArrowStyle={itemStyles.arrow}
               iconStyle={itemStyles.icon}
               icon={<FaBriefcase />}
             >
-              <h3 className="vertical-timeline-element-title">Software Engineer</h3>
-              <h4 className="vertical-timeline-element-subtitle">Company / Team</h4>
-              <p className="description">Building interactive systems and intelligent features.</p>
+              <h3 className="text-xl font-semibold tracking-wide">Technical Systems Analyst</h3>
+              <h4 className="text-sm opacity-80">Royal Bank of Canada</h4>
+              <p className="text-sm ">Building A.I. document analyzer and Flask microservice.</p>
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
               className="vertical-timeline-element--work"
-              date="2023 — 2024"
+              date="2024"
               contentStyle={itemStyles.content}
               contentArrowStyle={itemStyles.arrow}
               iconStyle={itemStyles.icon}
               icon={<FaBriefcase />}
             >
-              <h3 className="vertical-timeline-element-title">Undergraduate Research Assistant</h3>
-              <h4 className="vertical-timeline-element-subtitle">Lab / University</h4>
-              <p className="description">Prototyped models and tools; wrote and evaluated experiments.</p>
+              <h3 className="text-xl font-semibold tracking-wide">Data Analyst Intern </h3>
+              <h4 className="text-sm opacity-80">Shared Services Canada</h4>
+              <p className="text-sm">Engineered an ETL pipeline for processing unstructured documents into structured, queryable data for retrieval-augmented generation.</p>
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
               className="vertical-timeline-element--education"
-              date="2021 — 2025"
+              date="2022 — Expected 2027"
               contentStyle={itemStyles.content}
               contentArrowStyle={itemStyles.arrow}
               iconStyle={itemStyles.icon}
               icon={<FaGraduationCap />}
             >
-              <h3 className="vertical-timeline-element-title">B.Sc. Computer Science</h3>
-              <h4 className="vertical-timeline-element-subtitle">Carleton University</h4>
-              <p className="description">CS + Math coursework, projects, and extracurriculars.</p>
+              <h3 className="text-xl font-semibold tracking-wide">B.Sc. Computer Science</h3>
+              <h4 className="text-sm opacity-80">Carleton University</h4>
+              <p className="text-sm">Computer Science Major. Mathematics Minor. Artificial Intelligence/Machine Learning stream,.</p>
             </VerticalTimelineElement>
 
             <VerticalTimelineElement iconStyle={itemStyles.icon} icon={<FaStar />} />

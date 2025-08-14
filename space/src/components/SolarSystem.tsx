@@ -62,7 +62,7 @@ const SolarSystem = (props: Props) => {
     Mars: 'Experience',
     Jupiter: 'Jupiter',
     Saturn: 'Projects',
-    Uranus: 'Other',
+    Uranus: 'Uranus',
     Neptune: 'Neptune',
     Pluto: 'Pluto',
     Moon: 'Moon',
@@ -99,16 +99,16 @@ const SolarSystem = (props: Props) => {
   const handlePlanetClick = (name?: string) => {
     // Map planet names to panels. Adjust as desired.
     const mapping: Record<string, PanelName> = {
-      Mercury: 'About Me',
-      Venus: 'Experience',
-      Earth: 'Projects',
-      Mars: 'Other',
-      Jupiter: 'Experience',
+      Mercury: 'Other',
+      Venus: 'Other',
+      Earth: 'About Me',
+      Mars: 'Experience',
+      Jupiter: 'Other',
       Saturn: 'Projects',
       Uranus: 'Other',
-      Neptune: 'About Me',
+      Neptune: 'Other',
       Pluto: 'Other',
-      Moon: 'Projects',
+      Moon: 'Other',
     }
     const target = name ? mapping[name] ?? 'About Me' : 'About Me'
     onCloseAndSwitch(target)

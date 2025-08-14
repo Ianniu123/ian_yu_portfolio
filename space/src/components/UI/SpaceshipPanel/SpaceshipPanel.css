@@ -73,7 +73,7 @@
   gap: 40px;
   flex-grow: 1;      /* Allows content to fill available space */
   overflow-y: auto;  /* Enables vertical scrolling ONLY when needed */
-  height: 500px
+  height: 500px;
 }
 
 .panel-content::-webkit-scrollbar {
